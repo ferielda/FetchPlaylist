@@ -1,0 +1,2 @@
+# Paste NetEase playlist URL below, save and run 导出歌单_网易云.bat (or export_playlist_netease.bat)
+# Example: https://music.163.com/

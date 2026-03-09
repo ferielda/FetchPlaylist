@@ -1,0 +1,2 @@
+# Paste QQ Music playlist URL below, save and run 导出歌单_QQ.bat (or export_playlist_qq.bat)
+# Example: https://y.qq.com
