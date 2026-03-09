@@ -1,107 +1,65 @@
-# 网易云 / QQ 音乐歌单导出
+etchPlaylist
+FetchPlaylist 是一个高效、简洁的歌单导出工具，能够将你喜爱的网易云音乐和 QQ 音乐歌单导出为 CSV 格式，方便备份与管理。
 
-从网易云音乐或 QQ 音乐个人歌单抓取全部歌曲信息（歌名、歌手、专辑、时长等），导出为 CSV。
+功能特点
+多平台支持：同时支持网易云音乐与 QQ 音乐。
 
-## 文件夹说明
+导出格式：统一导出为 CSV 文件，兼容 Excel 与主流数据分析工具。
 
-- **根目录**：只保留常用入口与链接文件  
-  - `playlist_link_qq.txt`：QQ 音乐歌单链接（粘贴后运行「导出歌单_QQ.bat」）  
-  - `playlist_link_netease.txt`：网易云歌单链接（粘贴后运行「导出歌单_网易云.bat」）  
-  - `导出歌单_QQ.bat` / `导出歌单_网易云.bat`：导出对应平台歌单  
-  - `启动QQ音乐API.bat` / `启动网易云API.bat`：启动本地 API 服务（导出前需先运行）  
-  - `README.md`：本说明  
-- **bin/**：脚本与依赖  
-  - `qq_playlist_scraper.py`、`netease_playlist_scraper.py`：抓取脚本  
-  - `export_playlist_qq.bat`、`export_playlist_netease.bat`：导出逻辑（由根目录 bat 调用）  
-  - `QQMusicApi/`：QQ 音乐本地 API 项目  
-  - `requirements.txt`：Python 依赖（`pip install -r bin/requirements.txt`）
+本地化 API：集成本地 API 服务，确保数据抓取的稳定性与隐私安全。
 
-## 快速使用
+一键运行：针对 Windows 用户优化，支持直接双击 .bat 文件运行，无需频繁操作命令行。
 
-1. **网易云**：把歌单链接写入 `playlist_link_netease.txt` → 先双击 `启动网易云API.bat`，再双击 `导出歌单_网易云.bat`。  
-2. **QQ 音乐**：把歌单链接写入 `playlist_link_qq.txt` → 先双击 `启动QQ音乐API.bat`，再双击 `导出歌单_QQ.bat`。  
-3. 导出的 CSV 在根目录，文件名为「创建者的歌单信息.csv」。
+环境要求
+在使用前，请确保你的系统已安装以下环境：
 
----
+下载项目
+你可以通过以下两种方式获取本项目：
 
-# 网易云音乐歌单抓取（脚本说明）
+使用 Git 克隆：
 
-从网易云音乐个人歌单页面抓取全部歌曲信息（歌名、歌手、专辑、时长等）。
+下载 ZIP 包：
+点击 GitHub 页面右上角的 <> Code 按钮，选择 Download ZIP，解压到本地即可。
 
-## 方式一：使用本地 API 代理（推荐，避免 20001）
+安装步骤
+安装 Python 依赖：
+在终端或 CMD 中进入项目根目录，运行：
 
-官方直连常被风控返回 20001，建议用 [NeteaseCloudMusicApi](https://github.com/Binaryify/NeteaseCloudMusicApi) 在本地起一个代理。**无需 git clone**，用 npx 即可。
+配置 API 环境：
 
-### 1. 安装 Node.js 并启动本地 API
+网易云：本项目采用 npx 自动拉取 API，无需手动部署。
 
-- 若未安装，请先安装 [Node.js](https://nodejs.org/)（建议 18+）。
-- 在任意目录打开终端，执行：
+QQ 音乐：首次使用时，请进入 bin/QQMusicApi 目录执行 npm install 以安装必要的依赖。
 
-```bash
-npx NeteaseCloudMusicApi@latest
-```
+使用方法
+1. 导出网易云歌单
+启动 API 服务（双击运行启动脚本）。
 
-首次运行会自动下载依赖，看到类似 `server running @ http://localhost:3000` 即表示已启动，**保持该窗口不关闭**。
+打开 playlist_link_netease.txt，将歌单链接粘贴进去（程序会自动获取链接中最后一个有效 ID）。
 
-### 2. 指定本地 API 并运行脚本
+双击运行 导出歌单_网易云.bat，生成的 CSV 文件将保存在当前目录下。
 
-**另开一个终端**，在项目目录下执行（脚本在 `bin` 目录）：
+2. 导出 QQ 音乐歌单
+启动 QQ 音乐 API 服务。
 
-**Windows CMD：**
-```cmd
-set NETEASE_API_BASE=http://127.0.0.1:3000
-python bin\netease_playlist_scraper.py 931794508
-```
+打开 playlist_link_qq.txt，粘贴歌单链接。
 
-**Windows PowerShell：**
-```powershell
-$env:NETEASE_API_BASE="http://127.0.0.1:3000"
-python bin\netease_playlist_scraper.py 931794508
-```
+双击运行 导出歌单_QQ.bat 即可导出。
 
-**Linux / macOS：**
-```bash
-export NETEASE_API_BASE=http://127.0.0.1:3000
-python bin/netease_playlist_scraper.py 931794508
-```
+提示：若文本文件中包含多个链接，程序默认提取最后一行链接进行处理。
 
-之后每次抓取前，只要先启动 NeteaseCloudMusicApi，再设置 `NETEASE_API_BASE` 并运行脚本即可。
+项目结构
+常见问题 (FAQ)
+Q: 程序闪退怎么办？
+A: 请检查是否安装了 Node.js 18+，并确认 bin/ 目录下的相关 API 服务是否已成功启动。
 
----
+Q: 导出后没有 CSV 文件？
+A: 请检查链接格式是否正确，并查看黑框（命令行）中是否有报错提示。
 
-## 方式二：直连官方（需有效 Cookie，易被 20001）
+Q: Linux 或 macOS 用户如何使用？
+A: 由于 .bat 文件仅限 Windows，请直接在终端执行 Python 命令：python export_netease.py。
 
-在浏览器登录 [网易云音乐](https://music.163.com)，F12 → Network → 任选请求 → Request Headers 里复制整段 **Cookie**，然后：
+致谢与许可证
+本项目使用了  和  等开源组件。
 
-```cmd
-set NETEASE_COOKIE=你复制的Cookie
-python bin\netease_playlist_scraper.py 歌单ID或链接
-```
-
-Cookie 过期或风控时可能仍返回 20001，此时建议改用方式一。
-
----
-
-## 安装依赖与常用命令
-
-```bash
-pip install -r bin/requirements.txt
-```
-
-```bash
-# 只打印到控制台
-python bin\netease_playlist_scraper.py 931794508
-
-# 保存为 JSON
-python bin\netease_playlist_scraper.py 931794508 -o 歌单.json
-
-# 同时导出 CSV
-python bin\netease_playlist_scraper.py 931794508 -o 歌单.json -t 歌曲.csv
-```
-
-## 环境变量说明
-
-| 变量 | 说明 |
-|------|------|
-| `NETEASE_API_BASE` | 设为 `http://127.0.0.1:3000` 时使用本地 NeteaseCloudMusicApi，避免直连 20001 |
-| `NETEASE_COOKIE` | 可选，覆盖脚本内默认 Cookie（直连时用） |
+本工具仅供个人学习与研究使用，请勿用于商业用途或大规模抓取数据。
